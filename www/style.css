@@ -1,0 +1,24 @@
+
+body {
+    background-image: url(/background.gif); 
+    background-repeat: repeat;
+}
+
+
+div#myModal, div#success {
+  /*make behave nicely on mobile*/
+  position:relative;
+  top:0;
+  left:0;
+  width:300px;
+  margin: 100px auto;
+}
+
+form#ssids div div input {
+  width:260px;
+}
+
+
+#myModalLabel {
+  color:#ff00ff;
+}

@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <link href="/bootstrap.css" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
+  <script src="/jquery.js"></script>
+  <script src="/bootstrap.js"></script>
+  <script>
+  	$(document).ready(function(){
+  		// prime ssid fields, triple-hinge is unescaped
+  		$('input#ssid1').val("{{{ssid1}}}")
+  		$('input#ssid2').val("{{{ssid2}}}")
+  		$('input#ssid3').val("{{{ssid3}}}")
+  		$('input#ssid4').val("{{{ssid4}}}")
+  		// validation functions
+  		function validate(val) {
+		  	if(val.match(/^[0-9a-zA-Z ~`!@#$%\^&*()_\-+={\[}\]|:;<,>.?\/]+$/) && val.length < 32){
+		  		return true;
+		  	} else {
+		  		return false;
+		  	}	  			
+  		}
+  		function validate_all() {
+		  	all_validated = true;
+		  	// field states
+		  	for (var i = 1; i <= 4; i++) {
+		  		var input_sel = 'input#ssid' + i
+			 		if (validate($(input_sel).val())) {
+			  		$(input_sel).parents('div.control-group').removeClass('error');
+			  		$(input_sel).parents('div.control-group').addClass('success');		  		
+			  	} else {
+			  		$(input_sel).parents('div.control-group').removeClass('success');
+			  		$(input_sel).parents('div.control-group').addClass('error');
+			  		all_validated = false;  		
+			  	}
+			  }
+			  // button state
+		  	if (all_validated) {
+		  		$('#tag-btn').removeClass('disabled')
+		  	} else {
+		  		$('#tag-btn').addClass('disabled')
+		  	}
+  		}
+  		// call validate all on load
+  		validate_all();
+  		// input validation
+		  $('form#ssids div div input').keyup(function(event) {
+		  	// + String.fromCharCode(event.which)
+		  	validate_all();
+		  });
+		  // submit logic
+		  function onTagSuccess() {
+				$('form#ssids div.control-group').removeClass('error');
+				$('form#ssids div.control-group').addClass('success');
+				$('#tag-btn').val("Tagged!");
+				$('#tag-btn').addClass('btn-success');
+				$('#tag-btn').addClass('disabled');
+				// $('#myModal').modal('hide');
+		    var delayedhide = setTimeout(function() {
+		      $('div#myModal').hide();
+			    var delayedhide = setTimeout(function() {
+			      $('div#success').show();
+			    }, 500);				      
+		    }, 1000);
+		  }
+		  function onTagFailure() {
+				$('form#ssids div.control-group').removeClass('success');
+				$('form#ssids div.control-group').addClass('error');
+				$('#tag-btn').addClass('btn-danger');
+				$('#tag-btn').addClass('disabled');
+		    var delayedrestore = setTimeout(function() {
+					$('form#ssids div.control-group').removeClass('success');
+					$('form#ssids div.control-group').removeClass('error');
+					$('#tag-btn').removeClass('btn-danger');	
+					$('#tag-btn').removeClass('disabled');	      
+		    }, 1000);	
+		  }
+		  $('#tag-btn').click(function(event){
+		  	if (!$('#tag-btn').hasClass('disabled')) {
+			  	var val1 = $('input#ssid1').val();
+			  	var val2 = $('input#ssid2').val();
+			  	var val3 = $('input#ssid3').val();
+			  	var val4 = $('input#ssid4').val();
+			  	var params = {'ssid1':val1, 'ssid2':val2, 'ssid3':val3, 'ssid4':val4};
+			  	// first test if server is ready then send actual request
+			  	// this is necessary because server will restart network
+			  	// right after sending tags and cannot properly respond
+					$.getJSON("/ready", {}, function(data) {
+						// server is ready, send actual request
+						// alert(JSON.stringify(data));
+						if (data.ret == "ready_steady") {
+							$.get("/tag", params, function(data) {
+								// don't care about replies
+							});
+							// assumed to have worked as we ready-checked
+							onTagSuccess();
+						} else {
+							// not ready, server is probably just restarting
+							onTagFailure();
+						}
+					}).error(function() {
+						// not ready, server is probably just restarting
+						onTagFailure();					
+				  });
+				}
+		  });
+		});   
+  </script>
+</head>
+<body>
+
+
+<div class="modal" id="myModal" tabindex="-1">
+<div class="modal-header">
+<h3 id="myModalLabel">WIFI TAGGER</h3>
+</div>
+<div class="modal-body">
+  <form id="ssids" action="/tag" method="get">
+		<div class="control-group">
+			<div class="controls">
+				<input id="ssid1" name="ssid4" type="text"><br>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<input id="ssid2" name="ssid4" type="text"><br>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<input id="ssid3" name="ssid4" type="text"><br>
+			</div>
+		</div>		
+		<div class="control-group">
+			<div class="controls">
+				<input id="ssid4" name="ssid4" type="text"><br>
+			</div>
+		</div>
+  </form>
+	<p>ALL YOUR WIFI BELONG TO US!</p><p>Enter text -> Tag on wireless network lists.</p>  
+</div>
+<div class="modal-footer">
+<button id="tag-btn" class="btn btn-large btn-block btn-primary disabled">Tag!</button>
+</div>
+</div>
+
+
+<div class="modal" id="success" tabindex="-1" style="width:200px; margin: 220px auto; display:none">
+<div class="modal-body">
+<h3 id="myModalLabel">UR TAG IS LIVE!</h3>
+	<p class="text-info">Thank you and Please come again. We are here to serve all your tagging needs. xoxo <3</p>  
+</div>
+</div>
+
+
+</body>
+</html>
+
