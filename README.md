@@ -8,6 +8,8 @@ Each ID is a string that can be edited through a web interface. This portal is c
 This project was made possible by the support of Clinic for Open Source Arts (COSA) http://clinicopensourcearts.org/
 and is under a GPL-3.0 License.
 
+<img src="https://github.com/wheresaddie/RouterWars/blob/master/tags.png">
+
 
 Setup Process
 =============
