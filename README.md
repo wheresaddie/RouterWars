@@ -1,14 +1,14 @@
 RouterWars
 =============
 
-RouterWars is a wifi mod to leave SSID messages on an open wireless network broadcasting SSID within it's range. 
+RouterWars is a wifi mod to leave SSID messages via wireless network SSID within it's range. 
 
-RouterWars utilizes custom firmware based on OpenWrtt, a Linux operating system targeting embedded devices. All messages are publicly accessible to anyone within the routers range, i.e. so instead of seeing 'NETGEAR' in the menu of available networks from your devices, you might see 'Watch out for the Cop on 4th and Perry'. 
+RouterWars utilizes custom firmware based on OpenWrt, a Linux OS which targets embedded devices. All messages are publicly accessible to anyone within the routers range, i.e. so instead of seeing 'NETGEAR' in the menu of available networks from your devices, you might see 'Watch out for the Cop on 4th and Perry'. The SSID once selected automatically opens and reroutes any request to its GUI. 
 
 Each ID is a field string that can be edited through a web interface portal which is accessible when you click on the open SSIDs being broadcast. When connecting to any of the SSIDs the access point sets up a captive portal to reroute any web page requests to the web interface. It can be used to leave anonymous messages to people within its range, warnings to activists or protesters in the area or even to troll your neighbors.
 
 This project was made possible by the support of Clinic for Open Source Arts (COSA) http://clinicopensourcearts.org/
-and is under a GPL-3.0 License.
+and is under a GPL-3.0 License in 2020. 
 
 <img src="https://github.com/wheresaddie/RouterWars/blob/master/tags.png">
 
